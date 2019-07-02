@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import fishShape from '../../helpers/propz/fishShapes';
 import format from '../../helpers/format';
 
@@ -8,6 +9,13 @@ import './Fish.scss';
 class Fish extends React.Component {
   static propTypes = {
     fish: fishShape.fishShape,
+    addFishToOrder: PropTypes.func.isRequired,
+  }
+
+  addClickevent = (e) => {
+    const { fish, addFishToOrder } = this.props;
+    e.preventDefault();
+    addFishToOrder(fish.id);
   }
 
   render() {
@@ -25,6 +33,7 @@ class Fish extends React.Component {
         <p>{fish.desc}</p>
         <button
           disabled={!isAvailable}
+          onClick={this.addClickevent}
         >
           {isAvailable ? 'Add To Order' : 'Sold Out!'}
         </button>
