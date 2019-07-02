@@ -4,11 +4,25 @@ import format from '../../helpers/format';
 import './NewOrder.scss';
 
 class NewOrder extends React.Component {
+  state={
+    orderName: '',
+  }
+
+  nameChange = (e) => {
+    e.preventDefault();
+    this.setState({ orderName: e.target.value });
+  }
+
   renderOrder = (key) => {
     const fish = this.props.fishes.find(x => x.id === key);
     const count = this.props.fishOrder[key];
+    const xClickFunction = (e) => {
+      e.preventDefault();
+      this.props.removeFromOrder(key);
+    };
+
     return (
-      <li>
+      <li key={key}>
         <div className="col-2 count">
           {count}lbs
         </div>
@@ -19,14 +33,21 @@ class NewOrder extends React.Component {
           {format.formatPrice(fish.price * count)}
         </div>
         <div className="col-2">
-          <button className="btn btn-outline-dark">X</button>
+          <button className="btn btn-outline-dark" onClick={xClickFunction}>X</button>
         </div>
       </li>
     );
   };
 
+  saveOrder = (e) => {
+    e.preventDefault();
+    this.props.saveNewOrder(this.state.orderName);
+    this.setState({ orderName: '' });
+  }
+
   render() {
     const { fishOrder } = this.props;
+    const { orderName } = this.state;
     const orderIds = Object.keys(fishOrder);
     const orderExists = orderIds.length > 0;
 
@@ -47,6 +68,8 @@ class NewOrder extends React.Component {
               className="form-control"
               id="order-name"
               placeholder="John's Order"
+              value={orderName}
+              onChange={this.nameChange}
             />
           </div>
         </form>
@@ -57,7 +80,7 @@ class NewOrder extends React.Component {
         <div className="text-center">
           {
             orderExists ? (
-              <button className="btn btn-outline-dark"> Save Order </button>
+              <button className="btn btn-outline-dark" onClick={this.saveOrder}> Save Order </button>
             ) : (
               <div>Add Inventory to your order</div>
             )
