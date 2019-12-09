@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 
 import Inventory from '../Inventory/Inventory';
-import NewOrders from '../NewOrder/NewOrder';
+import NewOrder from '../NewOrder/NewOrder';
 import Orders from '../Orders/Orders';
 import fishData from '../../helpers/data/fishData';
 import orderData from '../../helpers/data/orderData';
@@ -72,7 +72,7 @@ class Home extends React.Component {
     delete updateOrder.id;
     orderData.putOrder(orderId, updateOrder)
       .then(() => {
-        this.setState({ fishOrder: {}, orderEditing: {}});
+        this.setState({ fishOrder: {}, orderEditing: {} });
         this.getOrders();
       })
       .catch(err => console.error('unable to update', err));
@@ -106,20 +106,36 @@ class Home extends React.Component {
             <Inventory fishes={fishes} addFishToOrder={this.addFishToOrder}/>
           </div>
           <div className="col">
-            <NewOrders
+            <div className="menu">
+              <header className="top">
+                <h1>
+                  Catch
+                  <span className="ofThe">
+                    <span className="of">Of</span>
+                    <span className="the">The</span>
+                  </span>
+                  Day
+                </h1>
+                <h3 className="tagline">
+                  <span>Fresh Seafood Market</span>
+                </h3>
+              </header>
+            </div>
+            <NewOrder
               fishes={fishes}
-              fishOrder= {fishOrder}
+              fishOrder={fishOrder}
               removeFromOrder={this.removeFromOrder}
               saveNewOrder={this.saveNewOrder}
               orderEditing={orderEditing}
             />
           </div>
           <div className="col">
-            <Orders orders={orders} deleteOrder={this.deleteOrder} selectOrderToEdit={this.selectOrderToEdit} />
+            <Orders orders={orders} deleteOrder={this.deleteOrder} selectOrderToEdit={this.selectOrderToEdit}/>
           </div>
         </div>
       </div>
     );
   }
 }
+
 export default Home;
